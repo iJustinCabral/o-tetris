@@ -19,4 +19,9 @@ Add Start Menu
 Handle Game Over/Reset  
 Increase speed of tick on new round  
 
+### -= 01/02/2025 =-
+
+*Draw playing grid  
+*Draw next piece area
+
 
