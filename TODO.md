@@ -22,6 +22,39 @@ Increase speed of tick on new round
 ### -= 01/02/2025 =-
 
 *Draw playing grid  
-*Draw next piece area
+*Draw next piece area  
+
+Have block move down the screen on tick  
+Control left/right block direction  
+Handle block collisions
+Add custom tetrimno block shapes  
+Change shape of certain blocks  
+Abililty to slam block down  
+Count lines cleared towards score  
+Count 4 lines as a Tetris  
+Add Score counter  
+Add Upcoming Block preview
+-Add Start Menu  
++Handle Game Over/Reset  
+Increase speed of tick on new round  
+
+
+### -= 01/04/ 2025 =- 
+
+*Changed design  
+*Handle gameover state  
+
+Define Tetrimono shape
+Have block move down the screen on tick  
+Control left/right block direction  
+Handle block collisions
+Add custom tetrimno block shapes  
+Change shape of certain blocks  
+Abililty to slam block down  
+Count lines cleared towards score  
+Count 4 lines as a Tetris  
+Add Score counter  
+Add Upcoming Block preview
+Increase speed of tick on new round  
 
 
