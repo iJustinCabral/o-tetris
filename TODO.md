@@ -39,7 +39,7 @@ Add Upcoming Block preview
 Increase speed of tick on new round  
 
 
-### -= 01/04/ 2025 =- 
+### -= 01/04/2025 =- 
 
 *Changed design  
 *Handle gameover state  
@@ -53,7 +53,26 @@ Change shape of certain blocks
 Abililty to slam block down  
 Count lines cleared towards score  
 Count 4 lines as a Tetris  
-Add Score counter  
++Add Score counter  
+Add Upcoming Block preview
+Increase speed of tick on new round  
+
+### -= 01/05/2025 =-
+
+*Changed design  
+*Handle gameover state  
+*Add Score counter  
+*Add tick cycle for gameplay
+
+Define Tetrimono shape
+Have block move down the screen on tick  
+Control left/right block direction  
+Handle block collisions
+Add custom tetrimno block shapes  
+Change shape of certain blocks  
+Abililty to slam block down  
+Count lines cleared towards score  
+Count 4 lines as a Tetris  
 Add Upcoming Block preview
 Increase speed of tick on new round  
 
