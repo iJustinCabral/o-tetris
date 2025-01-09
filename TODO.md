@@ -64,11 +64,11 @@ Increase speed of tick on new round
 *Add Score counter  
 *Add tick cycle for gameplay
 
-Define Tetrimono shape
++Define Tetrimono shape
 Have block move down the screen on tick  
 Control left/right block direction  
 Handle block collisions
-Add custom tetrimno block shapes  
+-Add custom tetrimno block shapes  
 Change shape of certain blocks  
 Abililty to slam block down  
 Count lines cleared towards score  
@@ -76,4 +76,19 @@ Count 4 lines as a Tetris
 Add Upcoming Block preview
 Increase speed of tick on new round  
 
+
+### -= 01/08/2025 =-
+
+*Define tetrimino shape  
+*Drawing the tetrimino  
+
+Have block move down the screen on tick  
+Control left/right block direction  
+Handle block collisions
+Rotate shape of certain blocks  
+Abililty to slam block down  
+Count lines cleared towards score  
+Count 4 lines as a Tetris  
+Add Upcoming Block preview
+Increase speed of tick on new round  
 

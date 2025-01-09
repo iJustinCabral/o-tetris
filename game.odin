@@ -2,6 +2,7 @@
 package game
 
 import    "core:fmt"
+import    "core:math/rand"
 import rl "vendor:raylib"
 
 // Constants
@@ -23,14 +24,81 @@ game_over    := true
 rows_cleared := 0
 score        := 0
 level        := 1
-tick_timer   : f32 = TICK_RATE 
+tick_timer   : f32 = TICK_RATE
 
 Tetrimino :: struct {
-    shape: [4][4]bool,
+    shape: [dynamic][dynamic]int,
     color: rl.Color,
     position: Vector2i,
     rotation: int,
 }
+
+// Define the shapes
+o_tet := Tetrimino{
+    shape = {
+	{1, 1},
+	{1, 1},
+    },
+    color = rl.YELLOW,
+}
+
+t_tet := Tetrimino{
+    shape = {
+	{1,1,1},
+	{0,1,0},
+	{0,0,0}
+    },
+    color = rl.PURPLE,
+ }
+
+i_tet := Tetrimino{
+    shape = {
+	{0,0,0,0},
+	{0,0,0,0},
+	{0,0,0,0},
+	{1,1,1,1},
+    },
+    color = rl.SKYBLUE,
+ }
+
+l_tet := Tetrimino{
+    shape = {
+	{1,0,0},
+	{1,0,0},
+	{1,1,0},
+    },
+    color = rl.ORANGE,
+}
+
+j_tet := Tetrimino{
+    shape = {
+	{0,0,1},
+	{0,0,1},
+	{0,1,1},
+    },
+    color = rl.BLUE
+}
+
+s_tet := Tetrimino {
+    shape = {
+	{0,0,0},
+	{0,1,1},
+	{1,1,0},
+    },
+    color = rl.GREEN,
+ }
+
+z_tet := Tetrimino {
+    shape = {
+	{0,0,0},
+	{1,1,0},
+	{0,1,1},
+    },
+    color = rl.RED
+}
+
+tetriminos : []Tetrimino = {o_tet, t_tet, i_tet, l_tet, j_tet, s_tet, z_tet}
+current_tet := rand.choice(tetriminos[:])
 
 main :: proc() {
     rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "O-Tetris")
@@ -68,7 +136,6 @@ main :: proc() {
 
 	if tick_timer <= 0 {
 	    // Gameplay logic goes here
-
 	    tick_timer = TICK_RATE + tick_timer
 	}
 
@@ -81,6 +148,7 @@ main :: proc() {
 	draw_grid()
 	draw_instructions()
 	draw_stats()
+	draw_tetrimino(i_tet)
     }
 
 }
@@ -93,7 +161,7 @@ reset_game :: proc() {
 }
 
 next_level :: proc() {
-
+    // TODO: Change the tick rate to make the drop rate faster for each level increase
 }
 
 draw_grid :: proc() {
@@ -123,7 +191,20 @@ draw_stats :: proc() {
     rl.DrawText("LEVEL:                           1", 40, 60, 20, TET_GREEN)
 }
 
-draw_next_piece :: proc() {
+draw_tetrimino :: proc(tet: Tetrimino) {
+    for row in 0..<len(tet.shape) {
+	for col in 0..<len(tet.shape[row]) {
+	    if tet.shape[row][col] == 1 {
+		x := tet.position[0] + col * CELL_SIZE
+		y := tet.position[1] + row * CELL_SIZE
+		rl.DrawRectangle(i32(x), i32(y), CELL_SIZE, CELL_SIZE, tet.color)
+	    }
+	}
+    }
+}
 
+
+draw_next_piece :: proc() {
+    // TODO: Choose a random piece out of our array of tet_pieces to draw next
 }
 
