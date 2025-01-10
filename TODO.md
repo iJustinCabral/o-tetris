@@ -82,13 +82,29 @@ Increase speed of tick on new round
 *Define tetrimino shape  
 *Drawing the tetrimino  
 
-Have block move down the screen on tick  
-Control left/right block direction  
-Handle block collisions
-Rotate shape of certain blocks  
-Abililty to slam block down  
-Count lines cleared towards score  
++Have block move down the screen on tick  
++Control left/right block direction  
++Handle block collisions
++Rotate shape of certain blocks  
++Abililty to slam block down  
++Count lines cleared towards score  
 Count 4 lines as a Tetris  
-Add Upcoming Block preview
++Add Upcoming Block preview
+Increase speed of tick on new round  
+
+
+### -= 01/09/2025 =-
+
+*Implement game memory struct  
+*Reset game memory on game over  
+*Have block move down screen on tick  
+*Control left/right block direction  
+*Handle block collisions  
+*Rotate shape of certain blocks  
+*Abililty to slam block down  
+*Count lines cleared towards score  
+*Add Upcoming Block preview  
+
+Count 4 lines as a Tetris  
 Increase speed of tick on new round  
 
