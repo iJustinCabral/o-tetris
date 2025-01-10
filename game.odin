@@ -22,7 +22,6 @@ PIECE_GREEN   :: rl.Color({0x45, 0x7A, 0x5F, 0xFF})
 
 // Type and Variable Definitions
 Vector2i     :: [2]int
-tick_timer   : f32 = TICK_RATE
 
 GameMemory :: struct {
     current_tet: Tetrimino,
@@ -30,8 +29,11 @@ GameMemory :: struct {
     grid: [20][10]Cell,
     game_over: bool,
     rows_cleared: int,
+    total_rows_cleared: int,
     score: int,
     level: int,
+    tick_timer: f32,
+
 }
 
 Tetrimino :: struct {
@@ -148,11 +150,10 @@ main :: proc() {
 	    game_mem.game_over = false
 	}
 	else {
-	   tick_timer -= rl.GetFrameTime() 
+	   game_mem.tick_timer -= rl.GetFrameTime() 
 	}
 
-	if tick_timer <= 0 && !game_mem.game_over {
-	    // Gameplay logic goes here
+	if game_mem.tick_timer <= 0 && !game_mem.game_over {
 	    game_mem.current_tet.position.y += 1
 	    if !can_place_tetrimino(&game_mem) {
 		game_mem.current_tet.position.y -= 1 // undo
@@ -160,7 +161,7 @@ main :: proc() {
 	    }
 
 
-	    tick_timer = TICK_RATE + tick_timer
+	    game_mem.tick_timer = TICK_RATE + game_mem.tick_timer
 	}
 
 
@@ -185,6 +186,8 @@ reset_game :: proc(mem: ^GameMemory) {
     mem.next_tet = rand.choice(tetriminos[:])
     mem.rows_cleared = 0
     mem.grid = [20][10]Cell{}
+    mem.tick_timer = TICK_RATE
+    mem.total_rows_cleared = 0
 
     mem.current_tet.position.x = (GRID_WIDTH - len(mem.current_tet.shape[0])) / 2; // Center horizontally
     mem.current_tet.position.y = 0; // Start at the top
@@ -250,12 +253,10 @@ is_row_full :: proc(grid: [20][10]Cell, row: int) -> bool {
     return true;
 }
 
-
-
 clear_rows :: proc(mem: ^GameMemory) -> int {
     cleared := 0;
 
-    for row := GRID_HEIGHT - 1; row >= 0; row -= 1 { // Start from the last row and move upward
+    for row := GRID_HEIGHT - 1; row >= 0; { // No decrement here, manual control of `row`
         if is_row_full(mem.grid, row) {
             cleared += 1;
 
@@ -266,11 +267,16 @@ clear_rows :: proc(mem: ^GameMemory) -> int {
 
             // Clear the topmost row
             mem.grid[0] = [GRID_WIDTH]Cell{}; // Reset the top row to empty
+
+            // Keep `row` at the same index to recheck the shifted row
+        } else {
+            row -= 1; // Only decrement if no row was cleared
         }
     }
 
     return cleared;
 }
+
 
 
 can_place_tetrimino :: proc(mem: ^GameMemory) -> bool {
@@ -296,7 +302,6 @@ can_place_tetrimino :: proc(mem: ^GameMemory) -> bool {
     return true;
 }
 
-
 place_tetrimino :: proc(mem: ^GameMemory) {
     for row in 0..<len(mem.current_tet.shape) {
         for col in 0..<len(mem.current_tet.shape[row]) {
@@ -314,8 +319,8 @@ place_tetrimino :: proc(mem: ^GameMemory) {
 
     // Check for completed rows and clear them
     cleared := clear_rows(mem)
-    mem.rows_cleared += cleared;
-    mem.score += 100 * mem.rows_cleared
+    mem.total_rows_cleared += cleared;
+    mem.score += calculate_score(cleared)
     next_level(mem)
 
     // Spawn new Tetrimino
@@ -330,11 +335,36 @@ place_tetrimino :: proc(mem: ^GameMemory) {
     }
 }
 
-next_level :: proc(mem: ^GameMemory) {
-    mem.level =(mem.rows_cleared / 10) + 1
+calculate_score :: proc(rows_cleared: int) -> int {
+    score := 0 
+    switch rows_cleared {
+	case 1: score = 100
+	case 2: score = 300
+	case 3: score = 500
+	case 4: score = 800
+	case 5: score = 1200
+	case 6: score = 1600
+	case 7: score = 2000
+	case 8: score = 4000
+    }
 
+    return score
 }
 
+next_level :: proc(mem: ^GameMemory) {
+
+    target_rows := mem.level * 10 // increase level every 10 rows cleared
+
+    if mem.total_rows_cleared >= target_rows {
+	mem.level += 1
+	mem.tick_timer = max(0.5, mem.tick_timer - 0.03)
+        
+	fmt.printf("Level: {}/n", mem.level)
+	fmt.printf("Tick:  {}/n", mem.tick_timer)
+
+    }
+    
+}
 
 draw_grid :: proc(mem: ^GameMemory) {
     // Draw the game canvas
@@ -392,13 +422,13 @@ draw_instructions :: proc() {
 
 draw_stats :: proc() {
 
-    // TODO: Make these work with formatted C Strings after
-    score_text := fmt.ctprintf("SCORE:                           %d", game_mem.score)
-    cleared_text := fmt.ctprintf("ROWS HIT:                      %d", game_mem.rows_cleared)
+    score_text := fmt.ctprintf("SCORE:                          %d", game_mem.score)
+    cleared_text := fmt.ctprintf("ROWS HIT:                      %d", game_mem.total_rows_cleared)
+    level_text := fmt.ctprintf("LEVEL:                           1", game_mem.level)
 
     rl.DrawText(cleared_text, 40, 20, 20, TET_GREEN)
     rl.DrawText(score_text, 40, 40, 20, TET_GREEN)
-    rl.DrawText("LEVEL:                           1", 40, 60, 20, TET_GREEN)
+    rl.DrawText(level_text, 40, 60, 20, TET_GREEN)
 }
 
 draw_tetrimino :: proc(tet: Tetrimino) {

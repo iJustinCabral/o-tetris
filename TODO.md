@@ -108,3 +108,12 @@ Increase speed of tick on new round
 Count 4 lines as a Tetris  
 Increase speed of tick on new round  
 
+
+### -= 01/10/2025 =-
+
+*Count 4 lines as a Tetris  
+*Increase speed of tick on new round
+
+
+#### GAME COMPLETED!
+
